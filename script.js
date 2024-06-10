@@ -4,7 +4,7 @@ const BOUNDARY_X_MIN = 0;
 const BOUNDARY_X_MAX = 1400;
 const BOUNDARY_Y_MIN = 0;
 const BOUNDARY_Y_MAX = 800;
-const BALL_COUNT = 20;
+const BALL_COUNT = 30;
 const ballArray = [];
 
 // define box style
@@ -61,7 +61,7 @@ class Ball {
     if (this.y  <= BOUNDARY_Y_MIN || this.y + this.w >= BOUNDARY_Y_MAX) {
       this.vy *= -1;
     }
-
+    //update x and y
     this.element.style.left = `${this.x}px`;
     this.element.style.top = `${this.y}px`;
   }
@@ -75,26 +75,51 @@ class Ball {
 
     //collision condition: distance less than sum of radius(r = w/2)
     if (distance < this.w / 2 + other.w / 2) {
-      this.vx *= -1;
-      this.vy *= -1;
-      other.vx *= -1;
-      other.vy *= -1;
+      //angle of collision in radian and speed
+      const angle = Math.atan2(dy, dx);
+      const speed1 = Math.sqrt(this.vx ** 2 + this.vy ** 2);
+      const speed2 = Math.sqrt(other.vx ** 2 + other.vy ** 2);
+      
+      //direction in radian of first and 2nd ball
+      const direction1 = Math.atan2(this.vy, this.vx);
+      const direction2 = Math.atan2(other.vy, other.vx);
+      
+      //actual x and y velocity disregarding angle
+      const velocityX1 = speed1 * Math.cos(direction1 - angle);
+      const velocityY1 = speed1 * Math.sin(direction1 - angle);
+      const velocityX2 = speed2 * Math.cos(direction2 - angle);
+      const velocityY2 = speed2 * Math.sin(direction2 - angle);
+      
+      //actual final speed after collision
+      const finalVelocityX1 = ((this.w - other.w) * velocityX1 + (other.w + other.w) * velocityX2) / (this.w + other.w);
+      const finalVelocityX2 = ((this.w + this.w) * velocityX1 + (other.w - this.w) * velocityX2) / (this.w + other.w);
+      
+      //breakdown the speed into x and y velocity
+      this.vx = Math.cos(angle) * finalVelocityX1 + Math.cos(angle + Math.PI / 2) * velocityY1;
+      this.vy = Math.sin(angle) * finalVelocityX1 + Math.sin(angle + Math.PI / 2) * velocityY1;
+      other.vx = Math.cos(angle) * finalVelocityX2 + Math.cos(angle + Math.PI / 2) * velocityY2;
+      other.vy = Math.sin(angle) * finalVelocityX2 + Math.sin(angle + Math.PI / 2) * velocityY2;
     }
   }
 }
 
+// loop through ball count and render
 for (let i = 0; i < BALL_COUNT; i++) {
+  //random size between 20pcx and 70px
   var ballSize = getRandomInt(2,7);
   const ball = new Ball(
+    //making sure the ball renders inside the boundary
     getRandomInt(BOUNDARY_X_MIN + ballSize * 10, BOUNDARY_X_MAX - ballSize * 10),
     getRandomInt(BOUNDARY_Y_MIN + ballSize * 10, BOUNDARY_Y_MAX - ballSize * 10),
     ballSize * 10
   );
   box.appendChild(ball.element);
+  //pushing element into array
   ballArray.push(ball);
 }
 
 function render() {
+  // i makes sure that we don't check collision of balls multiple times
   let i = 0;
   for(let ball of ballArray){
     ball.move();
