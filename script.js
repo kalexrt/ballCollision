@@ -4,7 +4,7 @@ const BOUNDARY_X_MIN = 0;
 const BOUNDARY_X_MAX = 1400;
 const BOUNDARY_Y_MIN = 0;
 const BOUNDARY_Y_MAX = 800;
-const BALL_COUNT = 30;
+const BALL_COUNT = 50;
 const ballArray = [];
 
 // define box style
@@ -99,14 +99,21 @@ class Ball {
       this.vy = Math.sin(angle) * finalVelocityX1 + Math.sin(angle + Math.PI / 2) * velocityY1;
       other.vx = Math.cos(angle) * finalVelocityX2 + Math.cos(angle + Math.PI / 2) * velocityY2;
       other.vy = Math.sin(angle) * finalVelocityX2 + Math.sin(angle + Math.PI / 2) * velocityY2;
+
+      //fixes overlap
+      const overlap = (this.w / 2 + other.w / 2 - distance) / 2;
+      this.x += overlap;
+      this.y += overlap;
+      other.x -= overlap;
+      other.y -= overlap;
     }
   }
 }
 
-// loop through ball count and render
+// loop through ball count and generate
 for (let i = 0; i < BALL_COUNT; i++) {
   //random size between 20pcx and 70px
-  var ballSize = getRandomInt(2,7);
+  var ballSize = getRandomInt(2,5);
   const ball = new Ball(
     //making sure the ball renders inside the boundary
     getRandomInt(BOUNDARY_X_MIN + ballSize * 10, BOUNDARY_X_MAX - ballSize * 10),
@@ -119,7 +126,7 @@ for (let i = 0; i < BALL_COUNT; i++) {
 }
 
 function render() {
-  // i makes sure that we don't check collision of balls multiple times
+  // 'i' makes sure that we don't check collision of balls multiple times
   let i = 0;
   for(let ball of ballArray){
     ball.move();
