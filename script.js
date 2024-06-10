@@ -3,7 +3,7 @@ const colors=['#2D572C','#E6D690','#5B3A29','#2271B3','#F5D033','#1C1C1C','#F4A9
 const BOUNDARY_X_MIN = 0;
 const BOUNDARY_X_MAX = 1400;
 const BOUNDARY_Y_MIN = 0;
-const BOUNDARY_Y_MAX = 800;
+const BOUNDARY_Y_MAX = 1000;
 const BALL_COUNT = 50;
 const ballArray = [];
 
@@ -51,9 +51,6 @@ class Ball {
   }
 
   move() {
-    this.x += this.vx;
-    this.y += this.vy;
-
     // Check for boundary collisions
     if (this.x <= BOUNDARY_X_MIN || this.x + this.w >= BOUNDARY_X_MAX) {
       this.vx *= -1;
@@ -61,6 +58,12 @@ class Ball {
     if (this.y  <= BOUNDARY_Y_MIN || this.y + this.w >= BOUNDARY_Y_MAX) {
       this.vy *= -1;
     }
+
+
+    this.x += this.vx;
+    this.y += this.vy;
+
+    
     //update x and y
     this.element.style.left = `${this.x}px`;
     this.element.style.top = `${this.y}px`;
@@ -129,11 +132,12 @@ function render() {
   // 'i' makes sure that we don't check collision of balls multiple times
   let i = 0;
   for(let ball of ballArray){
-    ball.move();
+    
     for (let j = i + 1; j < ballArray.length; j++) {
       ball.detectCollision(ballArray[j]);
     }
     i += 1;
+    ball.move();
   };
   requestAnimationFrame(render);
 }
