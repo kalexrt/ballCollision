@@ -1,9 +1,9 @@
 //define constant variables
 const colors=['#2D572C','#E6D690','#5B3A29','#2271B3','#F5D033','#1C1C1C','#F4A900','#A52019','#DE4C8A','#ED760E','#89AC76','#354D73']
 const BOUNDARY_X_MIN = 0;
-const BOUNDARY_X_MAX = 1400;
+const BOUNDARY_X_MAX = 1500;
 const BOUNDARY_Y_MIN = 0;
-const BOUNDARY_Y_MAX = 1000;
+const BOUNDARY_Y_MAX = 700;
 const BALL_COUNT = 50;
 const ballArray = [];
 
@@ -14,6 +14,7 @@ box.style.width=`${BOUNDARY_X_MAX}px`;
 box.style.height=`${BOUNDARY_Y_MAX}px`;
 box.style.border='2px solid #000';
 box.style.position='relative';
+box.style.overflow='hidden';
 document.body.appendChild(box);
 
 
