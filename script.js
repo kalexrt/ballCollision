@@ -52,10 +52,10 @@ class Ball {
 
   move() {
     // Check for boundary collisions
-    if (this.x <= BOUNDARY_X_MIN || this.x + this.w >= BOUNDARY_X_MAX) {
+    if (this.x - this.w/2 <= BOUNDARY_X_MIN || this.x + this.w >= BOUNDARY_X_MAX) {
       this.vx *= -1;
     }
-    if (this.y  <= BOUNDARY_Y_MIN || this.y + this.w >= BOUNDARY_Y_MAX) {
+    if (this.y - this.w/2 <= BOUNDARY_Y_MIN || this.y + this.w >= BOUNDARY_Y_MAX) {
       this.vy *= -1;
     }
 
