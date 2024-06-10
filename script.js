@@ -94,14 +94,14 @@ class Ball {
       const velocityY2 = speed2 * Math.sin(direction2 - angle);
       
       //actual final speed after collision
-      const finalVelocityX1 = ((this.w - other.w) * velocityX1 + (other.w + other.w) * velocityX2) / (this.w + other.w);
-      const finalVelocityX2 = ((this.w + this.w) * velocityX1 + (other.w - this.w) * velocityX2) / (this.w + other.w);
+      const finalVelocityX = ((this.w - other.w) * velocityX1 + (other.w + other.w) * velocityX2) / (this.w + other.w);
+      const finalVelocityY = ((this.w + this.w) * velocityX1 + (other.w - this.w) * velocityX2) / (this.w + other.w);
       
       //breakdown the speed into x and y velocity
-      this.vx = Math.cos(angle) * finalVelocityX1 + Math.cos(angle + Math.PI / 2) * velocityY1;
-      this.vy = Math.sin(angle) * finalVelocityX1 + Math.sin(angle + Math.PI / 2) * velocityY1;
-      other.vx = Math.cos(angle) * finalVelocityX2 + Math.cos(angle + Math.PI / 2) * velocityY2;
-      other.vy = Math.sin(angle) * finalVelocityX2 + Math.sin(angle + Math.PI / 2) * velocityY2;
+      this.vx = Math.cos(angle) * finalVelocityX - Math.sin(angle) * velocityY1;
+      this.vy = Math.sin(angle) * finalVelocityX + Math.cos(angle) * velocityY1;
+      other.vx = Math.cos(angle) * finalVelocityY - Math.sin(angle) * velocityY2;
+      other.vy = Math.sin(angle) * finalVelocityY + Math.cos(angle) * velocityY2;
 
       //fixes overlap
       const overlap = (this.w / 2 + other.w / 2 - distance) / 2;
